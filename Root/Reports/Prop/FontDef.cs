@@ -142,6 +142,7 @@ namespace Root.Reports {
       }
       switch (standardFont) {
         case FontDef.StandardFont.Arial: { return "Arial"; }
+        case FontDef.StandardFont.MicrosoftSansSerif: { return "Microsoft Sans Serif"; }
         case FontDef.StandardFont.Courier: { return "Courier New"; }
         case FontDef.StandardFont.Helvetica: { return "Helvetica"; }
         case FontDef.StandardFont.Symbol: { return "Symbol"; }
@@ -222,7 +223,7 @@ namespace Root.Reports {
       if (!(report.formatter is PdfFormatter)) {
         throw new ReportException("for 'PdfFormatter' only");
       }
-      if (!"arial,courier,helvetica,times-roman,symbol,zapfdingbats".Contains(sFontName.ToLower())) {
+      if (!"arial,microsoftsansserif,courier,helvetica,times-roman,symbol,zapfdingbats".Contains(sFontName.ToLower())) {
         throw new ReportException("this font is not a standard PDF font");
       }
     }
@@ -343,7 +344,15 @@ namespace Root.Reports {
       /// (it is not embedded), so the PDF will declare "Arial" (and "Arial-Bold", "Arial-Italic",
       /// "Arial-BoldItalic") as the <c>BaseFont</c>.
       /// </remarks>
-      Arial
+      Arial,
+      /// <summary>Font "Microsoft Sans Serif"</summary>
+      /// <remarks>
+      /// Like Arial, this is not a standard PDF base font and is referenced by name only (not embedded),
+      /// so it renders faithfully in viewers that have the font installed (e.g. on Windows). Its metrics
+      /// were measured from the installed font; bold and italic are synthesized. The PDF declares
+      /// "MicrosoftSansSerif" (and "-Bold", "-Italic", "-BoldItalic") as the <c>BaseFont</c>.
+      /// </remarks>
+      MicrosoftSansSerif
     }
     #endregion
   }

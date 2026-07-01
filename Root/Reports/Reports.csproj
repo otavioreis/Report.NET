@@ -38,6 +38,10 @@
 		<EmbeddedResource Include="PDF\afm\Arial-Bold.afm" />
 		<EmbeddedResource Include="PDF\afm\Arial-Italic.afm" />
 		<EmbeddedResource Include="PDF\afm\Arial-BoldItalic.afm" />
+		<EmbeddedResource Include="PDF\afm\MicrosoftSansSerif.afm" />
+		<EmbeddedResource Include="PDF\afm\MicrosoftSansSerif-Bold.afm" />
+		<EmbeddedResource Include="PDF\afm\MicrosoftSansSerif-Italic.afm" />
+		<EmbeddedResource Include="PDF\afm\MicrosoftSansSerif-BoldItalic.afm" />
 	</ItemGroup>
 
 	<ItemGroup>
