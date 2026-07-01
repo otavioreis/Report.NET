@@ -7,7 +7,7 @@ using System.Drawing;
 // Author: Otto Mayer (mot@root.ch)
 // Version: 1.03
 
-// Report.NET copyright © 2002-2006 root-software ag, Bürglen Switzerland - Otto Mayer, Stefan Spirig, all rights reserved
+// Report.NET copyright ï¿½ 2002-2006 root-software ag, Bï¿½rglen Switzerland - Otto Mayer, Stefan Spirig, all rights reserved
 // This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
 // as published by the Free Software Foundation, version 2.1 of the License.
 // This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -141,8 +141,9 @@ namespace Root.Reports {
         return standardFont.ToString("G");
       }
       switch (standardFont) {
+        case FontDef.StandardFont.Arial: { return "Arial"; }
         case FontDef.StandardFont.Courier: { return "Courier New"; }
-        case FontDef.StandardFont.Helvetica: { return "Arial"; }
+        case FontDef.StandardFont.Helvetica: { return "Helvetica"; }
         case FontDef.StandardFont.Symbol: { return "Symbol"; }
         case FontDef.StandardFont.TimesRoman: { return "Times New Roman"; }
         case FontDef.StandardFont.ZapfDingbats: { return "Wingdings"; }
@@ -221,10 +222,7 @@ namespace Root.Reports {
       if (!(report.formatter is PdfFormatter)) {
         throw new ReportException("for 'PdfFormatter' only");
       }
-      if (sFontName == "Arial") {
-        sFontName = "Helvetica";
-      }
-      if (!"courier,helvetica,times-roman,symbol,zapfdingbats".Contains(sFontName.ToLower())) {
+      if (!"arial,courier,helvetica,times-roman,symbol,zapfdingbats".Contains(sFontName.ToLower())) {
         throw new ReportException("this font is not a standard PDF font");
       }
     }
@@ -337,7 +335,15 @@ namespace Root.Reports {
       /// <summary>Standard base 14 type 1 font "Times-Roman"</summary>
       TimesRoman,
       /// <summary>Standard base 14 type 1 font "ZapfDingbats"</summary>
-      ZapfDingbats
+      ZapfDingbats,
+      /// <summary>Font "Arial" (metrically equivalent to Helvetica)</summary>
+      /// <remarks>
+      /// Arial is not one of the 14 standard PDF base fonts, but virtually every PDF viewer provides
+      /// or substitutes it. The metrics are identical to Helvetica; the font is referenced by name only
+      /// (it is not embedded), so the PDF will declare "Arial" (and "Arial-Bold", "Arial-Italic",
+      /// "Arial-BoldItalic") as the <c>BaseFont</c>.
+      /// </remarks>
+      Arial
     }
     #endregion
   }

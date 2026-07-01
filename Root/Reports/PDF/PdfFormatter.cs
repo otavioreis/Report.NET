@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 #if Framework2
 using System.Collections.Generic;
 #else
@@ -15,7 +15,7 @@ using System.Drawing.Imaging;
 // Author: Otto Mayer (mot@root.ch)
 // Version: 1.05
 
-// Report.NET copyright © 2002-2006 root-software ag, Bürglen Switzerland - Otto Mayer, Stefan Spirig, all rights reserved
+// Report.NET copyright Â© 2002-2006 root-software ag, BÃ¼rglen Switzerland - Otto Mayer, Stefan Spirig, all rights reserved
 // This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
 // as published by the Free Software Foundation, version 2.1 of the License.
 // This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -336,7 +336,7 @@ namespace Root.Reports {
               BinaryReader r = new BinaryReader(imageData.stream);
               //CCIT 4
               //This String contain the startinf sequence of the tiff file for CCIT 4
-              string patternTiffFile = "ÿÿÿÿÿÿÿÿÿ";
+              string patternTiffFile = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
               string startTiffFile = "";
               int index = 0;
               int i = 0;
@@ -347,7 +347,7 @@ namespace Root.Reports {
               //CCIT 3
               if(startPositionTiff == -1) {
                 //This String contain the startinf sequence of the tiff file for CCIT 3
-                patternTiffFile = "Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ";
+                patternTiffFile = "ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½ ï¿½";
                 startPositionTiff = startTiffFile.IndexOf(patternTiffFile);
                 WriteLine("/Filter [/CCITTFaxDecode]");
                 WriteLine("/DecodeParms [<< /Columns " + image.Width + "  /Rows " + image.Height + " /EndOfBlock false/EncodedByteAlign true >>]"); // This line was added to support TIFF 
@@ -557,9 +557,9 @@ namespace Root.Reports {
     //----------------------------------------------------------------------------------------------------x
     /// <summary>Copies the contents of the buffer to the PDF output stream.</summary>
     internal void FlushBuffer() {
-      Byte[] aByte = System.Text.Encoding.Default.GetBytes(sb.ToString());
+      Byte[] aByte = aByteFromString(sb.ToString());
       bufferedStream.Write(aByte, 0, aByte.Length);
-      iBytesWrittenToStream += sb.Length;
+      iBytesWrittenToStream += aByte.Length;
       sb.Length = 0;
       //sb.Remove(0, sb.Length);
     }
@@ -568,9 +568,73 @@ namespace Root.Reports {
     /// <summary>Writes a string directly to the output stream.</summary>
     /// <param name="s">String to write to the output stream</param>
     internal void WriteDirect(String s) {
-      Byte[] aByte = System.Text.Encoding.Default.GetBytes(s);
+      Byte[] aByte = aByteFromString(s);
       bufferedStream.Write(aByte, 0, aByte.Length);
       iBytesWrittenToStream += aByte.Length;
+    }
+
+    //----------------------------------------------------------------------------------------------------x
+    /// <summary>Encodes a string according to the PDF "WinAnsiEncoding" (Windows code page 1252).</summary>
+    /// <param name="s">String to encode</param>
+    /// <returns>Byte array with exactly one byte per character</returns>
+    /// <remarks>
+    /// The standard fonts are written with "/Encoding /WinAnsiEncoding", so the text of the content streams
+    /// must be encoded with code page 1252 as well. This is done explicitly instead of using
+    /// <see cref="System.Text.Encoding.Default"/>: on the .NET Framework "Encoding.Default" is the ANSI code
+    /// page (usually CP-1252), but on .NET Core / .NET 5+ it is UTF-8. Under UTF-8 accented characters would
+    /// be written as several bytes (e.g. c-cedilla as 0xC3 0xA7, then rendered wrongly), and the byte count
+    /// would no longer match the "/Length" entries and the cross-reference (xref) offsets, corrupting the document.
+    /// The mapping produces one byte per character, so those lengths and offsets stay correct.
+    /// </remarks>
+    internal static Byte[] aByteFromString(String s) {
+      Byte[] aByte = new Byte[s.Length];
+      for (Int32 i = 0;  i < s.Length;  i++) {
+        Char c = s[i];
+        if (c < (Char)0x80 || (c >= (Char)0x00A0 && c <= (Char)0x00FF)) {
+          aByte[i] = (Byte)c;  // ASCII and Latin-1 range map 1:1 to WinAnsiEncoding
+        }
+        else {
+          aByte[i] = bWinAnsiSpecialChar(c);  // WinAnsi specific characters in the 0x80-0x9F range
+        }
+      }
+      return aByte;
+    }
+
+    //----------------------------------------------------------------------------------------------------x
+    /// <summary>Maps a Unicode character to its Windows-1252 code in the 0x80-0x9F range.</summary>
+    /// <param name="c">Unicode character (outside the range that maps 1:1)</param>
+    /// <returns>Windows-1252 byte, or '?' if the character cannot be represented</returns>
+    private static Byte bWinAnsiSpecialChar(Char c) {
+      switch ((Int32)c) {
+        case 0x20AC: return 0x80;  // euro sign
+        case 0x201A: return 0x82;  // single low-9 quotation mark
+        case 0x0192: return 0x83;  // latin small letter f with hook
+        case 0x201E: return 0x84;  // double low-9 quotation mark
+        case 0x2026: return 0x85;  // horizontal ellipsis
+        case 0x2020: return 0x86;  // dagger
+        case 0x2021: return 0x87;  // double dagger
+        case 0x02C6: return 0x88;  // modifier letter circumflex accent
+        case 0x2030: return 0x89;  // per mille sign
+        case 0x0160: return 0x8A;  // latin capital letter s with caron
+        case 0x2039: return 0x8B;  // single left-pointing angle quotation mark
+        case 0x0152: return 0x8C;  // latin capital ligature oe
+        case 0x017D: return 0x8E;  // latin capital letter z with caron
+        case 0x2018: return 0x91;  // left single quotation mark
+        case 0x2019: return 0x92;  // right single quotation mark
+        case 0x201C: return 0x93;  // left double quotation mark
+        case 0x201D: return 0x94;  // right double quotation mark
+        case 0x2022: return 0x95;  // bullet
+        case 0x2013: return 0x96;  // en dash
+        case 0x2014: return 0x97;  // em dash
+        case 0x02DC: return 0x98;  // small tilde
+        case 0x2122: return 0x99;  // trade mark sign
+        case 0x0161: return 0x9A;  // latin small letter s with caron
+        case 0x203A: return 0x9B;  // single right-pointing angle quotation mark
+        case 0x0153: return 0x9C;  // latin small ligature oe
+        case 0x017E: return 0x9E;  // latin small letter z with caron
+        case 0x0178: return 0x9F;  // latin capital letter y with diaeresis
+        default: return (Byte)'?';   // not representable in WinAnsiEncoding
+      }
     }
 
     //----------------------------------------------------------------------------------------------------x
@@ -602,7 +666,7 @@ namespace Root.Reports {
       #else
       bufferedStream = new BufferedStream(stream);
       #endif
-      // Wichtig: Es muss die Standardeinstellung für die Codierung verwendet werden !!!
+      // Wichtig: Es muss die Standardeinstellung fÃ¼r die Codierung verwendet werden !!!
       try {
         PrepareObjIds();
 
