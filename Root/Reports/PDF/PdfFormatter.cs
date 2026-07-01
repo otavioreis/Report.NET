@@ -23,721 +23,778 @@ using System.Drawing.Imaging;
 // should have received a copy of the GNU Lesser General Public License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA www.opensource.org/licenses/lgpl-license.html
 
-namespace Root.Reports {
-  /// <summary>PDF-Formatter</summary>
-  /// <remarks>This class is used to make a PDF document from the specified report.</remarks>
-  public class PdfFormatter : Formatter {
-    //------------------------------------------------------------------------------------------xx.01.2006
-    #region PdfFormatter
-    //----------------------------------------------------------------------------------------------------
+namespace Root.Reports
+{
+    /// <summary>PDF-Formatter</summary>
+    /// <remarks>This class is used to make a PDF document from the specified report.</remarks>
+    public class PdfFormatter : Formatter
+    {
+        //------------------------------------------------------------------------------------------xx.01.2006
+        #region PdfFormatter
+        //----------------------------------------------------------------------------------------------------
 
-    /// <summary>position of the xref table</summary>
-    internal Int32 iXRefPos;
+        /// <summary>position of the xref table</summary>
+        internal Int32 iXRefPos;
 
-    //----------------------------------------------------------------------------------------------------x
-    /// <summary>Initializes a new instance of the PDF formatter class.</summary>
-    /// <example>
-    /// <code>
-    /// using Root.Report;
-    /// using System;
-    /// namespace ReportSample {
-    /// class PdfPropertiesSample : Report {
-    ///   public static void Main() {
-    ///     PdfFormatter pf = new PdfFormatter();
-    ///     pf.sTitle = "PDF Sample";
-    ///     pf.sAuthor = "Otto Mayer, mot@root.ch";
-    ///     pf.sSubject = "Sample of some PDF features";
-    ///     pf.sKeywords = "Sample PDF Report.NET";
-    ///     pf.sCreator = "Report.NET Sample Application";
-    ///     pf.dt_CreationDate = new DateTime(2002, 8, 15, 0,0,0,0);
-    ///     pf.pageLayout = PageLayout.TwoColumnLeft;
-    ///     pf.bHideToolBar = true;
-    ///     pf.bHideMenubar = false;
-    ///     pf.bHideWindowUI = true;
-    ///     pf.bFitWindow = true;
-    ///     pf.bCenterWindow = true;
-    ///     pf.bDisplayDocTitle = true;
-    /// 
-    ///     RT.ViewPDF(new PdfPropertiesSample(pf), "PdfPropertiesSample.pdf");
-    ///   }
-    ///
-    ///   public PdfPropertiesSample(Formatter formatter) : base(formatter) {
-    ///   }
-    ///
-    ///   protected override void Create() {
-    ///     FontDef fd = new FontDef(this, FontDef.StandardFont.Helvetica);
-    ///     FontProp fp = new FontPropMM(fd, 4);
-    ///     FontProp fp_Title = new FontPropMM(fd, 11);
-    ///     fp_Title.bBold = true;
-    ///
-    ///     Page page = new Page(this);
-    ///     page.AddCenteredMM(40, new RepString(fp_Title, "PDF Properties Sample"));
-    ///     fp_Title.rSizeMM = 8;
-    ///     page.AddCenteredMM(100, new RepString(fp_Title, "First Page"));
-    ///     page.AddCenteredMM(120, new RepString(fp, "Choose &lt;Document Properties, Summary&gt; from the"));
-    ///     page.AddCenteredMM(126, new RepString(fp, "File menu to display the document properties"));
-    ///
-    ///     page = new Page(this);
-    ///     page.AddCenteredMM(100, new RepString(fp_Title, "Second Page"));
-    ///   }
-    /// }
-    /// }
-    /// </code>
-    /// </example>
-    public PdfFormatter() {
-      sb = new StringBuilder(10000);
+        //----------------------------------------------------------------------------------------------------x
+        /// <summary>Initializes a new instance of the PDF formatter class.</summary>
+        /// <example>
+        /// <code>
+        /// using Root.Report;
+        /// using System;
+        /// namespace ReportSample {
+        /// class PdfPropertiesSample : Report {
+        ///   public static void Main() {
+        ///     PdfFormatter pf = new PdfFormatter();
+        ///     pf.sTitle = "PDF Sample";
+        ///     pf.sAuthor = "Otto Mayer, mot@root.ch";
+        ///     pf.sSubject = "Sample of some PDF features";
+        ///     pf.sKeywords = "Sample PDF Report.NET";
+        ///     pf.sCreator = "Report.NET Sample Application";
+        ///     pf.dt_CreationDate = new DateTime(2002, 8, 15, 0,0,0,0);
+        ///     pf.pageLayout = PageLayout.TwoColumnLeft;
+        ///     pf.bHideToolBar = true;
+        ///     pf.bHideMenubar = false;
+        ///     pf.bHideWindowUI = true;
+        ///     pf.bFitWindow = true;
+        ///     pf.bCenterWindow = true;
+        ///     pf.bDisplayDocTitle = true;
+        /// 
+        ///     RT.ViewPDF(new PdfPropertiesSample(pf), "PdfPropertiesSample.pdf");
+        ///   }
+        ///
+        ///   public PdfPropertiesSample(Formatter formatter) : base(formatter) {
+        ///   }
+        ///
+        ///   protected override void Create() {
+        ///     FontDef fd = new FontDef(this, FontDef.StandardFont.Helvetica);
+        ///     FontProp fp = new FontPropMM(fd, 4);
+        ///     FontProp fp_Title = new FontPropMM(fd, 11);
+        ///     fp_Title.bBold = true;
+        ///
+        ///     Page page = new Page(this);
+        ///     page.AddCenteredMM(40, new RepString(fp_Title, "PDF Properties Sample"));
+        ///     fp_Title.rSizeMM = 8;
+        ///     page.AddCenteredMM(100, new RepString(fp_Title, "First Page"));
+        ///     page.AddCenteredMM(120, new RepString(fp, "Choose &lt;Document Properties, Summary&gt; from the"));
+        ///     page.AddCenteredMM(126, new RepString(fp, "File menu to display the document properties"));
+        ///
+        ///     page = new Page(this);
+        ///     page.AddCenteredMM(100, new RepString(fp_Title, "Second Page"));
+        ///   }
+        /// }
+        /// }
+        /// </code>
+        /// </example>
+        public PdfFormatter()
+        {
+            sb = new StringBuilder(10000);
 
-      pdfIndirectObject_Catalog = new PdfIndirectObject_Catalog(this);
-      pdfIndirectObject_Info = new PdfIndirectObject_Info(this);
-    }
-    #endregion
+            pdfIndirectObject_Catalog = new PdfIndirectObject_Catalog(this);
+            pdfIndirectObject_Info = new PdfIndirectObject_Info(this);
+        }
+        #endregion
 
-    //------------------------------------------------------------------------------------------xx.01.2006
-    #region PDF Document Properties
-    //----------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------xx.01.2006
+        #region PDF Document Properties
+        //----------------------------------------------------------------------------------------------------
 
-    //----------------------------------------------------------------------------------------------------x
+        //----------------------------------------------------------------------------------------------------x
 
-    /// <summary>Subject of the document</summary>
-    public String sSubject;
+        /// <summary>Subject of the document</summary>
+        public String sSubject;
 
-    /// <summary>Keywords associated with the document</summary>
-    public String sKeywords;
+        /// <summary>Keywords associated with the document</summary>
+        public String sKeywords;
 
-    /// <summary>Program that converted the document to PDF</summary>
-    internal String sProducer = "Report.NET by root-software ag";
+        /// <summary>Program that converted the document to PDF</summary>
+        internal String sProducer = "Report.NET by root-software ag";
 
-    /// <summary>Modification date and time of  the document</summary>
-    internal DateTime dt_ModDate = DateTime.Now;
+        /// <summary>Modification date and time of  the document</summary>
+        internal DateTime dt_ModDate = DateTime.Now;
 
-    //public Trapped bTrapped = Trapped.Unknown;
+        //public Trapped bTrapped = Trapped.Unknown;
 
-    /// <summary>Determines the page Mode in the PDF document</summary>
-    public PageMode pageMode = PageMode.UseNone;
+        /// <summary>Determines the page Mode in the PDF document</summary>
+        public PageMode pageMode = PageMode.UseNone;
 
-    /// <summary>Hide toolbar</summary>
-    public Boolean bHideToolBar = false;
+        /// <summary>Hide toolbar</summary>
+        public Boolean bHideToolBar = false;
 
-    /// <summary>Hide menu bar</summary>
-    public Boolean bHideMenubar = false;
+        /// <summary>Hide menu bar</summary>
+        public Boolean bHideMenubar = false;
 
-    /// <summary>Hide window UI</summary>
-    public Boolean bHideWindowUI = false;
+        /// <summary>Hide window UI</summary>
+        public Boolean bHideWindowUI = false;
 
-    /// <summary>Fit window</summary>
-    public Boolean bFitWindow = false;
+        /// <summary>Fit window</summary>
+        public Boolean bFitWindow = false;
 
-    /// <summary>Center window</summary>
-    public Boolean bCenterWindow = false;
+        /// <summary>Center window</summary>
+        public Boolean bCenterWindow = false;
 
-    /// <summary>Display document title</summary>
-    public Boolean bDisplayDocTitle = false;
+        /// <summary>Display document title</summary>
+        public Boolean bDisplayDocTitle = false;
 
-    /// <summary>Full screen page mode</summary>
-    public NonFullScreenPageMode nonFullScreenPageMode = NonFullScreenPageMode.UseNone;
+        /// <summary>Full screen page mode</summary>
+        public NonFullScreenPageMode nonFullScreenPageMode = NonFullScreenPageMode.UseNone;
 
-    /// <summary>Open action URI</summary>
-    public String sOpenActionURI = null;
+        /// <summary>Open action URI</summary>
+        public String sOpenActionURI = null;
 
-    /// <summary>Open action launch</summary>
-    public String sOpenActionLaunch = null;
+        /// <summary>Open action launch</summary>
+        public String sOpenActionLaunch = null;
 
-    /// <summary>File identifier</summary>
-    public String sFileIdentifier = Guid.NewGuid().ToString();
+        /// <summary>File identifier</summary>
+        public String sFileIdentifier = Guid.NewGuid().ToString();
 
-    #endregion
+        #endregion
 
-    //------------------------------------------------------------------------------------------xx.01.2006
-    #region Create RepObjX Objects
-    //----------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------xx.01.2006
+        #region Create RepObjX Objects
+        //----------------------------------------------------------------------------------------------------
 
-    internal override Object oCreate_Container() {
-      return PdfContainerX.instance;
-    }
+        internal override Object oCreate_Container()
+        {
+            return PdfContainerX.instance;
+        }
 
-    internal override Object oCreate_RepArcBase() {
-      return PdfRepArcBaseX.instance;
-    }
+        internal override Object oCreate_RepArcBase()
+        {
+            return PdfRepArcBaseX.instance;
+        }
 
-    //------------------------------------------------------------------------------------------03.02.2006
-    internal override Object oCreate_RepImage() {
-      return PdfRepImageX.instance;
-    }
+        //------------------------------------------------------------------------------------------03.02.2006
+        internal override Object oCreate_RepImage()
+        {
+            return PdfRepImageX.instance;
+        }
 
-    internal override Object oCreate_RepLine() {
-      return PdfRepLineX.instance;
-    }
+        internal override Object oCreate_RepLine()
+        {
+            return PdfRepLineX.instance;
+        }
 
-    internal override Object oCreate_RepRect() {
-      return PdfRepRectX.instance;
-    }
+        internal override Object oCreate_RepRect()
+        {
+            return PdfRepRectX.instance;
+        }
 
-    internal override Object oCreate_RepString() {
-      return PdfRepStringX.instance;
-    }
+        internal override Object oCreate_RepString()
+        {
+            return PdfRepStringX.instance;
+        }
 
-    //------------------------------------------------------------------------------------------03.02.2006
-    /// <summary>Creates the extended page data object.</summary>
-    /// <param name="page">Page</param>
-    /// <returns>Extended page data object</returns>
-    internal override Object oCreate_PageX(Page page) {
-      return new PdfIndirectObject_Page(this, page);
-    }
-    #endregion
+        //------------------------------------------------------------------------------------------03.02.2006
+        /// <summary>Creates the extended page data object.</summary>
+        /// <param name="page">Page</param>
+        /// <returns>Extended page data object</returns>
+        internal override Object oCreate_PageX(Page page)
+        {
+            return new PdfIndirectObject_Page(this, page);
+        }
+        #endregion
 
-    //------------------------------------------------------------------------------------------xx.01.2006
-    #region old
-    //----------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------xx.01.2006
+        #region old
+        //----------------------------------------------------------------------------------------------------
 
-    //----------------------------------------------------------------------------------------------------x
-    /// <summary>Builds the xref structure.</summary>
-    private void BuildXObjectsX() {
-//      foreach (ImageData imageData in report.ht_ImageData.Values) {
-//        imageData.stream.Position = 0;
-//        //Added By TechnoGuru - jjborie@yahoo.fr - http://www.borie.org/
-//        using(Image image = Image.FromStream(imageData.stream)) {
-//          // Tiff support
-//          //Added By TechnoGuru - jjborie@yahoo.fr - http://www.borie.org/
-//          if(image.RawFormat.Equals(ImageFormat.Tiff)) {
-//          NewObjId();
-//          Debug.Assert(iObjIdCur == (Int32)imageData.object_Data, "invalid object id of viewer preferences object");
-//          WriteLine((Int32)imageData.object_Data + " 0 obj");
-//          WriteLine("<<");
-//          WriteLine("/Type /XObject");
-//          WriteLine("/Subtype /Image");
-//          WriteLine("/Name /I" + (Int32)imageData.object_Data);
-//          WriteLine("/Width " + image.Width);
-//          WriteLine("/Height " + image.Height);
-//          //Int32 iImageStart = 0;
-//          //Int32 iImageLength = 0;
-//          //ImageFormat imageFormat = imageData.image.RawFormat;
-//          //if (Object.Equals(imageFormat, ImageFormat.Jpeg)) {
-//          //  iImageLength = (Int32)imageData.stream.Length;
-//          //  WriteLine("/Filter /DCTDecode");
-//          //}
-//        else if (Object.Equals(imageFormat, ImageFormat.Tiff)) {
-//          imageData.stream.Position = 0;
-//          BinaryReader br = new BinaryReader(imageData.stream);
-//          br.BaseStream.Position = 4;
-//          Int32 iPointer = br.ReadInt32();
-//          br.BaseStream.Position = iPointer;
-//          Int16 nTagCount = br.ReadInt16();
-//          Int32 iImage = 0;
-//          Int32 iRows = 0;
-//          Int32 iStripByteCounts = 0;
-//          while (nTagCount > 0) {
-//            Int16 nTagType = br.ReadInt16();
-//            Int16 nDataType = br.ReadInt16();
-//            Int32 iLength = br.ReadInt32();
-//            Int32 iData = br.ReadInt32();
-//            if (nTagType == 259) {  // Compression
-//              if (iData == 1) {
-//              }
-//              else if (iData == 5) {
-//                //WriteLine("/Filter /LZWDecode");
-//                //WriteLine("/Filter /CCITTFaxDecode"); //changed
-//              }
-//              else {
-//                Debug.Fail("unknown compression");
-//              }
-//            }
-//            else if (nTagType == 262) {  // Photometric Interpretation
-//              //Debug.Assert(iData == 2);  // RGB-Compression
-//            }
-//            else if (nTagType == 273) {  // Strip Offset
-//              iImage = iData;
-//              iRows = iLength;
-//            }
-//            else if (nTagType == 279) {  // Strip Byte Counts
-//              iStripByteCounts = iData;
-//            }
-//            else if (nTagType == 317) {  // Predictor
-//              Debug.Assert(iData == 2);  // Horizontal Predictor
-//              //WriteLine("/DecodeParms [<< /Predictor 2 >>]");
-//            }
-//            nTagCount--;
-//          }
-//          iPointer = br.ReadInt32();
-//
-//          br.BaseStream.Position = iImage;
-//          iImageStart = br.ReadInt32();
-//          br.BaseStream.Position = iImage + (iRows - 1) * 4;
-//          iImageLength = br.ReadInt32() - iImageStart;
-//
-//          br.BaseStream.Position = iStripByteCounts + (iRows - 1) * 4;
-//          Int32 iStripLength = br.ReadInt32();
-//          iImageLength += iStripLength;
-//  
-//          Console.WriteLine("");
-//
-//        }
-//        else {
-//          Debug.Fail("unknown image type: send image to mot@root.ch");
-//        }
-//        Int32 iBitsPerComponent = 0;
-//        String sColorSpace = null;
-//        if (imageData.image.PixelFormat == PixelFormat.Format8bppIndexed) {
-//          iBitsPerComponent = 8;
-//          sColorSpace = "DeviceGray";
-//        }
-//        else if (imageData.image.PixelFormat == PixelFormat.Format1bppIndexed) {
-//          iBitsPerComponent = 1;
-//          sColorSpace = "DeviceGray";
-//        }
-//        else if (imageData.image.PixelFormat == PixelFormat.Format24bppRgb) {
-//          iBitsPerComponent = 8;
-//          sColorSpace = "DeviceRGB";
-//        }
-//        else {
-//          Debug.Fail("unknown image format: send image to mot@root.ch");
-//        }
-//        WriteLine("/BitsPerComponent " + iBitsPerComponent.ToString());
-//        WriteLine("/ColorSpace /" + sColorSpace);
-//        WriteLine("/Length " + iImageLength.ToString());
-//        WriteLine(">>");
-//        WriteLine("stream");
-//        FlushBuffer();
-//        
-//        imageData.stream.Position = 0;
-//        BinaryReader r = new BinaryReader(imageData.stream);
-//        if (iImageStart > 0) {
-//          r.BaseStream.Position = iImageStart;
-//        }
-//        Byte[] aByte = r.ReadBytes(iImageLength);
-//        r.Close();
-//
-//        //stream.Flush();
-//        bufferedStream.Write(aByte, 0, aByte.Length);
-//        iBytesWrittenToStream += aByte.Length;
-//        WriteLine("\nendstream");
-//        WriteLine("endobj");
-//      }
-      foreach (ImageData imageData in report.ht_ImageData.Values) {
-        imageData.stream.Position = 0;
-        //Added By TechnoGuru - jjborie@yahoo.fr - http://www.borie.org/
+        //----------------------------------------------------------------------------------------------------x
+        /// <summary>Builds the xref structure.</summary>
+        private void BuildXObjectsX()
+        {
+            //      foreach (ImageData imageData in report.ht_ImageData.Values) {
+            //        imageData.stream.Position = 0;
+            //        //Added By TechnoGuru - jjborie@yahoo.fr - http://www.borie.org/
+            //        using(Image image = Image.FromStream(imageData.stream)) {
+            //          // Tiff support
+            //          //Added By TechnoGuru - jjborie@yahoo.fr - http://www.borie.org/
+            //          if(image.RawFormat.Equals(ImageFormat.Tiff)) {
+            //          NewObjId();
+            //          Debug.Assert(iObjIdCur == (Int32)imageData.object_Data, "invalid object id of viewer preferences object");
+            //          WriteLine((Int32)imageData.object_Data + " 0 obj");
+            //          WriteLine("<<");
+            //          WriteLine("/Type /XObject");
+            //          WriteLine("/Subtype /Image");
+            //          WriteLine("/Name /I" + (Int32)imageData.object_Data);
+            //          WriteLine("/Width " + image.Width);
+            //          WriteLine("/Height " + image.Height);
+            //          //Int32 iImageStart = 0;
+            //          //Int32 iImageLength = 0;
+            //          //ImageFormat imageFormat = imageData.image.RawFormat;
+            //          //if (Object.Equals(imageFormat, ImageFormat.Jpeg)) {
+            //          //  iImageLength = (Int32)imageData.stream.Length;
+            //          //  WriteLine("/Filter /DCTDecode");
+            //          //}
+            //        else if (Object.Equals(imageFormat, ImageFormat.Tiff)) {
+            //          imageData.stream.Position = 0;
+            //          BinaryReader br = new BinaryReader(imageData.stream);
+            //          br.BaseStream.Position = 4;
+            //          Int32 iPointer = br.ReadInt32();
+            //          br.BaseStream.Position = iPointer;
+            //          Int16 nTagCount = br.ReadInt16();
+            //          Int32 iImage = 0;
+            //          Int32 iRows = 0;
+            //          Int32 iStripByteCounts = 0;
+            //          while (nTagCount > 0) {
+            //            Int16 nTagType = br.ReadInt16();
+            //            Int16 nDataType = br.ReadInt16();
+            //            Int32 iLength = br.ReadInt32();
+            //            Int32 iData = br.ReadInt32();
+            //            if (nTagType == 259) {  // Compression
+            //              if (iData == 1) {
+            //              }
+            //              else if (iData == 5) {
+            //                //WriteLine("/Filter /LZWDecode");
+            //                //WriteLine("/Filter /CCITTFaxDecode"); //changed
+            //              }
+            //              else {
+            //                Debug.Fail("unknown compression");
+            //              }
+            //            }
+            //            else if (nTagType == 262) {  // Photometric Interpretation
+            //              //Debug.Assert(iData == 2);  // RGB-Compression
+            //            }
+            //            else if (nTagType == 273) {  // Strip Offset
+            //              iImage = iData;
+            //              iRows = iLength;
+            //            }
+            //            else if (nTagType == 279) {  // Strip Byte Counts
+            //              iStripByteCounts = iData;
+            //            }
+            //            else if (nTagType == 317) {  // Predictor
+            //              Debug.Assert(iData == 2);  // Horizontal Predictor
+            //              //WriteLine("/DecodeParms [<< /Predictor 2 >>]");
+            //            }
+            //            nTagCount--;
+            //          }
+            //          iPointer = br.ReadInt32();
+            //
+            //          br.BaseStream.Position = iImage;
+            //          iImageStart = br.ReadInt32();
+            //          br.BaseStream.Position = iImage + (iRows - 1) * 4;
+            //          iImageLength = br.ReadInt32() - iImageStart;
+            //
+            //          br.BaseStream.Position = iStripByteCounts + (iRows - 1) * 4;
+            //          Int32 iStripLength = br.ReadInt32();
+            //          iImageLength += iStripLength;
+            //  
+            //          Console.WriteLine("");
+            //
+            //        }
+            //        else {
+            //          Debug.Fail("unknown image type: send image to mot@root.ch");
+            //        }
+            //        Int32 iBitsPerComponent = 0;
+            //        String sColorSpace = null;
+            //        if (imageData.image.PixelFormat == PixelFormat.Format8bppIndexed) {
+            //          iBitsPerComponent = 8;
+            //          sColorSpace = "DeviceGray";
+            //        }
+            //        else if (imageData.image.PixelFormat == PixelFormat.Format1bppIndexed) {
+            //          iBitsPerComponent = 1;
+            //          sColorSpace = "DeviceGray";
+            //        }
+            //        else if (imageData.image.PixelFormat == PixelFormat.Format24bppRgb) {
+            //          iBitsPerComponent = 8;
+            //          sColorSpace = "DeviceRGB";
+            //        }
+            //        else {
+            //          Debug.Fail("unknown image format: send image to mot@root.ch");
+            //        }
+            //        WriteLine("/BitsPerComponent " + iBitsPerComponent.ToString());
+            //        WriteLine("/ColorSpace /" + sColorSpace);
+            //        WriteLine("/Length " + iImageLength.ToString());
+            //        WriteLine(">>");
+            //        WriteLine("stream");
+            //        FlushBuffer();
+            //        
+            //        imageData.stream.Position = 0;
+            //        BinaryReader r = new BinaryReader(imageData.stream);
+            //        if (iImageStart > 0) {
+            //          r.BaseStream.Position = iImageStart;
+            //        }
+            //        Byte[] aByte = r.ReadBytes(iImageLength);
+            //        r.Close();
+            //
+            //        //stream.Flush();
+            //        bufferedStream.Write(aByte, 0, aByte.Length);
+            //        iBytesWrittenToStream += aByte.Length;
+            //        WriteLine("\nendstream");
+            //        WriteLine("endobj");
+            //      }
+            foreach (ImageData imageData in report.ht_ImageData.Values)
+            {
+                imageData.stream.Position = 0;
+                //Added By TechnoGuru - jjborie@yahoo.fr - http://www.borie.org/
 #if !WindowsCE
-        using(Image image = Image.FromStream(imageData.stream)) {
-          // Tiff support
-          //Added By TechnoGuru - jjborie@yahoo.fr - http://www.borie.org/
-          if(image.RawFormat.Equals(ImageFormat.Tiff)) {
-//            NewObjId();
-            PdfIndirectObject_ImageJpeg pdfIndirectObject_ImageJpeg = (PdfIndirectObject_ImageJpeg)imageData.oImageResourceX;
-            WriteLine(pdfIndirectObject_ImageJpeg.iObjectNumber + " 0 obj"); 
-            WriteLine("<<"); 
-            WriteLine("/Type /XObject"); 
-            WriteLine("/Subtype /Image"); 
-            WriteLine("/Name /I" + pdfIndirectObject_ImageJpeg.iObjectNumber); 
-            WriteLine("/Width " + image.Width); 
-            WriteLine("/Height " + image.Height);
+                using (Image image = Image.FromStream(imageData.stream))
+                {
+                    // Tiff support
+                    //Added By TechnoGuru - jjborie@yahoo.fr - http://www.borie.org/
+                    if (image.RawFormat.Equals(ImageFormat.Tiff))
+                    {
+                        //            NewObjId();
+                        PdfIndirectObject_ImageJpeg pdfIndirectObject_ImageJpeg = (PdfIndirectObject_ImageJpeg)imageData.oImageResourceX;
+                        WriteLine(pdfIndirectObject_ImageJpeg.iObjectNumber + " 0 obj");
+                        WriteLine("<<");
+                        WriteLine("/Type /XObject");
+                        WriteLine("/Subtype /Image");
+                        WriteLine("/Name /I" + pdfIndirectObject_ImageJpeg.iObjectNumber);
+                        WriteLine("/Width " + image.Width);
+                        WriteLine("/Height " + image.Height);
 
-            // Handle B&W format with CCIT
-            if(image.PixelFormat.Equals(PixelFormat.Format1bppIndexed)) {
-              imageData.stream.Position = 0; 
-              BinaryReader r = new BinaryReader(imageData.stream);
-              //CCIT 4
-              //This String contain the startinf sequence of the tiff file for CCIT 4
-              string patternTiffFile = "���������";
-              string startTiffFile = "";
-              int index = 0;
-              int i = 0;
-              for(index=0; index < 2048; index++) {
-                startTiffFile += (char) (((i = r.ReadByte()) == 0?1:i));
-              }
-              int startPositionTiff = startTiffFile.IndexOf(patternTiffFile);
-              //CCIT 3
-              if(startPositionTiff == -1) {
-                //This String contain the startinf sequence of the tiff file for CCIT 3
-                patternTiffFile = "� � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � � �";
-                startPositionTiff = startTiffFile.IndexOf(patternTiffFile);
-                WriteLine("/Filter [/CCITTFaxDecode]");
-                WriteLine("/DecodeParms [<< /Columns " + image.Width + "  /Rows " + image.Height + " /EndOfBlock false/EncodedByteAlign true >>]"); // This line was added to support TIFF 
-              }
-              else {
-                WriteLine("/Filter /CCITTFaxDecode");
-                WriteLine("/DecodeParms << /K -1 /Columns " + image.Width + " >>"); // This line was added to support TIFF 
-              }
-              if(startPositionTiff == -1)startPositionTiff = 512;
-              WriteLine("/BitsPerComponent 1");
-              WriteLine("/ColorSpace /DeviceGray");
-              Int64 lLength = imageData.stream.Length; 
-              WriteLine("/Length " + (lLength - startPositionTiff).ToString()); // CHANGED 
-              WriteLine(">>"); 
-              WriteLine("stream"); 
-              FlushBuffer(); 
+                        // Handle B&W format with CCIT
+                        if (image.PixelFormat.Equals(PixelFormat.Format1bppIndexed))
+                        {
+                            imageData.stream.Position = 0;
+                            BinaryReader r = new BinaryReader(imageData.stream);
+                            //CCIT 4
+                            //This String contain the startinf sequence of the tiff file for CCIT 4
+                            string patternTiffFile = "ÿÿÿÿÿÿÿÿÿ";
+                          string startTiffFile = "";
+                            int index = 0;
+                            int i = 0;
+                            for (index = 0; index < 2048; index++)
+                            {
+                                startTiffFile += (char)(((i = r.ReadByte()) == 0 ? 1 : i));
+                            }
+                            int startPositionTiff = startTiffFile.IndexOf(patternTiffFile);
+                            //CCIT 3
+                            if (startPositionTiff == -1)
+                            {
+                                //This String contain the startinf sequence of the tiff file for CCIT 3
+                                patternTiffFile = "Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ Õ";
+                                startPositionTiff = startTiffFile.IndexOf(patternTiffFile);
+                                WriteLine("/Filter [/CCITTFaxDecode]");
+                                WriteLine("/DecodeParms [<< /Columns " + image.Width + "  /Rows " + image.Height + " /EndOfBlock false/EncodedByteAlign true >>]"); // This line was added to support TIFF 
+                            }
+                            else
+                            {
+                                WriteLine("/Filter /CCITTFaxDecode");
+                                WriteLine("/DecodeParms << /K -1 /Columns " + image.Width + " >>"); // This line was added to support TIFF 
+                            }
+                            if (startPositionTiff == -1) startPositionTiff = 512;
+                            WriteLine("/BitsPerComponent 1");
+                            WriteLine("/ColorSpace /DeviceGray");
+                            Int64 lLength = imageData.stream.Length;
+                            WriteLine("/Length " + (lLength - startPositionTiff).ToString()); // CHANGED 
+                            WriteLine(">>");
+                            WriteLine("stream");
+                            FlushBuffer();
 
-              imageData.stream.Position = 0;
-              r.ReadBytes((Int32)startPositionTiff);
-              Byte[] aByte = r.ReadBytes((Int32)lLength - startPositionTiff); // CHANGED 
-              r.Close(); 
+                            imageData.stream.Position = 0;
+                            r.ReadBytes((Int32)startPositionTiff);
+                            Byte[] aByte = r.ReadBytes((Int32)lLength - startPositionTiff); // CHANGED 
+                            r.Close();
 
-              //stream.Flush(); 
-              bufferedStream.Write(aByte, 0, aByte.Length); 
-              iBytesWrittenToStream += aByte.Length; 
-              WriteLine("\nendstream"); 
-              WriteLine("endobj"); 
-            }
-            else if(image.PixelFormat.Equals(PixelFormat.Format4bppIndexed)) {
-              //Not supported I don't have tiff file to test it =)
+                            //stream.Flush(); 
+                            bufferedStream.Write(aByte, 0, aByte.Length);
+                            iBytesWrittenToStream += aByte.Length;
+                            WriteLine("\nendstream");
+                            WriteLine("endobj");
+                        }
+                        else if (image.PixelFormat.Equals(PixelFormat.Format4bppIndexed))
+                        {
+                            //Not supported I don't have tiff file to test it =)
 
-              //            WriteLine("/Filter /CCITTFaxDecode");
-              //            WriteLine("/DecodeParms << /K -1 /Columns " + image.Width + " >>"); // This line was added to support TIFF 
-              //            WriteLine("/BitsPerComponent 4");
-              //            WriteLine("/ColorSpace /DeviceGray");
-            }
-            else {
-              //Tiff in gray or color are converted as jpeg in the tiff
-              MemoryStream ms = new MemoryStream();
-              image.Save(ms,ImageFormat.Jpeg);
-              Byte[] aByte = ms.GetBuffer();
+                            //            WriteLine("/Filter /CCITTFaxDecode");
+                            //            WriteLine("/DecodeParms << /K -1 /Columns " + image.Width + " >>"); // This line was added to support TIFF 
+                            //            WriteLine("/BitsPerComponent 4");
+                            //            WriteLine("/ColorSpace /DeviceGray");
+                        }
+                        else
+                        {
+                            //Tiff in gray or color are converted as jpeg in the tiff
+                            MemoryStream ms = new MemoryStream();
+                            image.Save(ms, ImageFormat.Jpeg);
+                            Byte[] aByte = ms.GetBuffer();
 
-              WriteLine("/BitsPerComponent 8");
-              WriteLine("/ColorSpace /DeviceRGB");
-              WriteLine("/Filter /DCTDecode");
-              WriteLine("/Length " + (aByte.Length).ToString()); // CHANGED 
-              WriteLine(">>"); 
-              WriteLine("stream"); 
-              FlushBuffer(); 
+                            WriteLine("/BitsPerComponent 8");
+                            WriteLine("/ColorSpace /DeviceRGB");
+                            WriteLine("/Filter /DCTDecode");
+                            WriteLine("/Length " + (aByte.Length).ToString()); // CHANGED 
+                            WriteLine(">>");
+                            WriteLine("stream");
+                            FlushBuffer();
 
-              bufferedStream.Write(aByte, 0, aByte.Length);
-              iBytesWrittenToStream += aByte.Length;
+                            bufferedStream.Write(aByte, 0, aByte.Length);
+                            iBytesWrittenToStream += aByte.Length;
 
-              WriteLine("\nendstream"); 
-              WriteLine("endobj"); 
-            }
-          }
-          imageData.stream.Close();
-          imageData.stream = null;
-        }
+                            WriteLine("\nendstream");
+                            WriteLine("endobj");
+                        }
+                    }
+                    imageData.stream.Close();
+                    imageData.stream = null;
+                }
 #endif
-      }
-    }
-    #endregion
+            }
+        }
+        #endregion
 
-    //------------------------------------------------------------------------------------------xx.01.2006
-    #region Objects
-    //----------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------xx.01.2006
+        #region Objects
+        //----------------------------------------------------------------------------------------------------
 
-    //----------------------------------------------------------------------------------------------------x
-    #if Framework2
-    internal List<PdfIndirectObject> list_PdfIndirectObject = new List<PdfIndirectObject>(50);
-    #else
+        //----------------------------------------------------------------------------------------------------x
+#if Framework2
+        internal List<PdfIndirectObject> list_PdfIndirectObject = new List<PdfIndirectObject>(50);
+#else
     internal ArrayList list_PdfIndirectObject = new ArrayList(50);
-    #endif
-
-    internal PdfIndirectObject_Catalog pdfIndirectObject_Catalog;
-    internal PdfIndirectObject_Info pdfIndirectObject_Info;
-    internal PdfIndirectObject_ViewerPreferences pdfIndirectObject_ViewerPreferences = null;
-    internal PdfIndirectObject_Pages pdfIndirectObject_Pages;
-
-    /// <summary>Prepares the PDF-object structure.</summary>
-    private void PrepareObjIds() {
-      if (bHideToolBar || bHideMenubar || bHideWindowUI || bFitWindow || bCenterWindow || bDisplayDocTitle
-        || nonFullScreenPageMode != NonFullScreenPageMode.UseNone)
-      {
-        pdfIndirectObject_ViewerPreferences = new PdfIndirectObject_ViewerPreferences(this);
-      }
-
-      //     iObjEncoding = iObjId++;
-
-      // search all fonts and prepare the pages
-      StringBuilder sb = new StringBuilder(50);
-
-      foreach (Page page in report.enum_Page) {
-      }
-      // pages
-      pdfIndirectObject_Pages = new PdfIndirectObject_Pages(this);
-      foreach (Page page in report.enum_Page) {
-        PdfIndirectObject_Page pdfIndirectObject_Page = (PdfIndirectObject_Page)page.oRepObjX;
-        PrepareObjIdsForContainer(pdfIndirectObject_Page, page);
-        pdfIndirectObject_Page.pdfIndirectObject_PageContents = new PdfIndirectObject_PageContents(this, page);
-      }
-      foreach (ImageData imageData in report.ht_ImageData.Values) {
-        imageData.oImageResourceX = new PdfIndirectObject_ImageJpeg(this, imageData);
-      }
-    }
-
-    //----------------------------------------------------------------------------------------------------x
-    /// <summary>Prepares the PDF-object structure for a container.</summary>
-    /// <param name="pdfPageData"></param>
-    /// <param name="iObjId"></param>
-    /// <param name="container"></param>
-    private void PrepareObjIdsForContainer(PdfIndirectObject_Page pdfPageData, Container container) {
-      foreach (RepObj repObj in container) {
-        if (repObj is Container) {
-          PrepareObjIdsForContainer(pdfPageData, (Container)repObj);
-        }
-        else if (repObj is RepArcBase) {
-          pdfPageData.bProcSet_PDF = true;
-        }
-        else if (repObj is RepImage) {
-//          RepImage repImage = (RepImage)repObj;
-//          ImageFormat imageFormat = repImage.imageData.image.RawFormat;
-//          if (Object.Equals(imageFormat, ImageFormat.Jpeg)) {
-//            pdfPageData.bProcSet_ImageC = true;
-//          }
-//          else if (Object.Equals(imageFormat, ImageFormat.Tiff)) {
-//            pdfPageData.bProcSet_ImageB = true;
-//          }
-//          else {
-//            Debug.Fail("unknown image type: send image to mot@root.ch");
-//          }
-          RepImage repImage = repObj as RepImage;
-          repImage.imageData.stream.Position = 0;
-          
-          //Added By TechnoGuru - jjborie@yahoo.fr - http://www.borie.org/
-          //To support tiff file
-          //I reload Image from stream to be more scalable
-          //(Dont't have like that lots of image object on memeory
-    #if !WindowsCE
-          using (Image image = Image.FromStream(repImage.imageData.stream)) {
-            if(image.RawFormat.Equals(ImageFormat.Tiff) && image.PixelFormat.Equals(PixelFormat.Format1bppIndexed)) {
-              pdfPageData.bProcSet_ImageI = true; // CHANGED 
-            }
-            else if(image.RawFormat.Equals(ImageFormat.Tiff) || image.RawFormat.Equals(ImageFormat.Jpeg)) {
-              pdfPageData.bProcSet_ImageC = true;
-            }
-            else {
-              Debug.Fail("unknown image type: send image to mot@root.ch");
-            }
-          }
 #endif
-        }
-        else if (repObj is RepLine) {
-          pdfPageData.bProcSet_PDF = true;
-        }
-        else if (repObj is RepRect) {
-          pdfPageData.bProcSet_PDF = true;
-        }
-        else if (repObj is RepString) {
-          FontData fontData_String = ((RepString)repObj).fontProp.fontData;
-          PdfIndirectObject_Font pdfIndirectObject_Font = (PdfIndirectObject_Font)fontData_String.oFontDataX;
-          if (fontData_String.oFontDataX == null) {  // extended font data for PDF must be created and registered
-            if (fontData_String is Type1FontData) {
-              pdfIndirectObject_Font = new PdfIndirectObject_Font_Type1(this, (Type1FontData)fontData_String);
-            }
-            else if (fontData_String is OpenTypeFontData) {
-              pdfIndirectObject_Font = new PdfIndirectObject_Font_OpenType(this, (OpenTypeFontData)fontData_String);
-            }
-            else {
-              Debug.Fail("unknown type of FontData");
-            }
-            fontData_String.oFontDataX = pdfIndirectObject_Font;
-          }
-          RepString repString = (RepString)repObj;
-          foreach (Char ch in repString.sText) {
-            fontData_String.bitArray_UsedChar[(Int32)ch] = true;
-          }
-          pdfPageData.RegisterFontData(fontData_String);
-          pdfPageData.bProcSet_Text = true;
-        }
-        else {
-          throw new ReportException("unknown report object type [" + repObj.GetType().FullName + "]"); 
-        }
-      }
-    }
-    #endregion
 
-    //------------------------------------------------------------------------------------------xx.01.2006
-    #region Output-Stream / Buffer
-    //----------------------------------------------------------------------------------------------------
+        internal PdfIndirectObject_Catalog pdfIndirectObject_Catalog;
+        internal PdfIndirectObject_Info pdfIndirectObject_Info;
+        internal PdfIndirectObject_ViewerPreferences pdfIndirectObject_ViewerPreferences = null;
+        internal PdfIndirectObject_Pages pdfIndirectObject_Pages;
 
-    /// <summary>number of bytes written to the PDF output stream</summary>
-    internal Int32 iBytesWrittenToStream;
+        /// <summary>Prepares the PDF-object structure.</summary>
+        private void PrepareObjIds()
+        {
+            if (bHideToolBar || bHideMenubar || bHideWindowUI || bFitWindow || bCenterWindow || bDisplayDocTitle
+              || nonFullScreenPageMode != NonFullScreenPageMode.UseNone)
+            {
+                pdfIndirectObject_ViewerPreferences = new PdfIndirectObject_ViewerPreferences(this);
+            }
 
-    /// <summary>PDF output stream for ASCII text</summary>
-    #if !WindowsCE
-    internal BufferedStream bufferedStream;
-    #else
+            //     iObjEncoding = iObjId++;
+
+            // search all fonts and prepare the pages
+            StringBuilder sb = new StringBuilder(50);
+
+            foreach (Page page in report.enum_Page)
+            {
+            }
+            // pages
+            pdfIndirectObject_Pages = new PdfIndirectObject_Pages(this);
+            foreach (Page page in report.enum_Page)
+            {
+                PdfIndirectObject_Page pdfIndirectObject_Page = (PdfIndirectObject_Page)page.oRepObjX;
+                PrepareObjIdsForContainer(pdfIndirectObject_Page, page);
+                pdfIndirectObject_Page.pdfIndirectObject_PageContents = new PdfIndirectObject_PageContents(this, page);
+            }
+            foreach (ImageData imageData in report.ht_ImageData.Values)
+            {
+                imageData.oImageResourceX = new PdfIndirectObject_ImageJpeg(this, imageData);
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------x
+        /// <summary>Prepares the PDF-object structure for a container.</summary>
+        /// <param name="pdfPageData"></param>
+        /// <param name="iObjId"></param>
+        /// <param name="container"></param>
+        private void PrepareObjIdsForContainer(PdfIndirectObject_Page pdfPageData, Container container)
+        {
+            foreach (RepObj repObj in container)
+            {
+                if (repObj is Container)
+                {
+                    PrepareObjIdsForContainer(pdfPageData, (Container)repObj);
+                }
+                else if (repObj is RepArcBase)
+                {
+                    pdfPageData.bProcSet_PDF = true;
+                }
+                else if (repObj is RepImage)
+                {
+                    //          RepImage repImage = (RepImage)repObj;
+                    //          ImageFormat imageFormat = repImage.imageData.image.RawFormat;
+                    //          if (Object.Equals(imageFormat, ImageFormat.Jpeg)) {
+                    //            pdfPageData.bProcSet_ImageC = true;
+                    //          }
+                    //          else if (Object.Equals(imageFormat, ImageFormat.Tiff)) {
+                    //            pdfPageData.bProcSet_ImageB = true;
+                    //          }
+                    //          else {
+                    //            Debug.Fail("unknown image type: send image to mot@root.ch");
+                    //          }
+                    RepImage repImage = repObj as RepImage;
+                    repImage.imageData.stream.Position = 0;
+
+                    //Added By TechnoGuru - jjborie@yahoo.fr - http://www.borie.org/
+                    //To support tiff file
+                    //I reload Image from stream to be more scalable
+                    //(Dont't have like that lots of image object on memeory
+#if !WindowsCE
+                    using (Image image = Image.FromStream(repImage.imageData.stream))
+                    {
+                        if (image.RawFormat.Equals(ImageFormat.Tiff) && image.PixelFormat.Equals(PixelFormat.Format1bppIndexed))
+                        {
+                            pdfPageData.bProcSet_ImageI = true; // CHANGED 
+                        }
+                        else if (image.RawFormat.Equals(ImageFormat.Tiff) || image.RawFormat.Equals(ImageFormat.Jpeg))
+                        {
+                            pdfPageData.bProcSet_ImageC = true;
+                        }
+                        else
+                        {
+                            Debug.Fail("unknown image type: send image to mot@root.ch");
+                        }
+                    }
+#endif
+                }
+                else if (repObj is RepLine)
+                {
+                    pdfPageData.bProcSet_PDF = true;
+                }
+                else if (repObj is RepRect)
+                {
+                    pdfPageData.bProcSet_PDF = true;
+                }
+                else if (repObj is RepString)
+                {
+                    FontData fontData_String = ((RepString)repObj).fontProp.fontData;
+                    PdfIndirectObject_Font pdfIndirectObject_Font = (PdfIndirectObject_Font)fontData_String.oFontDataX;
+                    if (fontData_String.oFontDataX == null)
+                    {  // extended font data for PDF must be created and registered
+                        if (fontData_String is Type1FontData)
+                        {
+                            pdfIndirectObject_Font = new PdfIndirectObject_Font_Type1(this, (Type1FontData)fontData_String);
+                        }
+                        else if (fontData_String is OpenTypeFontData)
+                        {
+                            pdfIndirectObject_Font = new PdfIndirectObject_Font_OpenType(this, (OpenTypeFontData)fontData_String);
+                        }
+                        else
+                        {
+                            Debug.Fail("unknown type of FontData");
+                        }
+                        fontData_String.oFontDataX = pdfIndirectObject_Font;
+                    }
+                    RepString repString = (RepString)repObj;
+                    foreach (Char ch in repString.sText)
+                    {
+                        fontData_String.bitArray_UsedChar[(Int32)ch] = true;
+                    }
+                    pdfPageData.RegisterFontData(fontData_String);
+                    pdfPageData.bProcSet_Text = true;
+                }
+                else
+                {
+                    throw new ReportException("unknown report object type [" + repObj.GetType().FullName + "]");
+                }
+            }
+        }
+        #endregion
+
+        //------------------------------------------------------------------------------------------xx.01.2006
+        #region Output-Stream / Buffer
+        //----------------------------------------------------------------------------------------------------
+
+        /// <summary>number of bytes written to the PDF output stream</summary>
+        internal Int32 iBytesWrittenToStream;
+
+        /// <summary>PDF output stream for ASCII text</summary>
+#if !WindowsCE
+        internal BufferedStream bufferedStream;
+#else
     private Stream bufferedStream;
-    #endif
+#endif
 
-    /// <summary>output buffer</summary>
-    internal StringBuilder sb;
+        /// <summary>output buffer</summary>
+        internal StringBuilder sb;
 
-    //----------------------------------------------------------------------------------------------------x
-    /// <summary>Copies the contents of the buffer to the PDF output stream.</summary>
-    internal void FlushBuffer() {
-      Byte[] aByte = aByteFromString(sb.ToString());
-      bufferedStream.Write(aByte, 0, aByte.Length);
-      iBytesWrittenToStream += aByte.Length;
-      sb.Length = 0;
-      //sb.Remove(0, sb.Length);
-    }
-
-    //----------------------------------------------------------------------------------------------------x
-    /// <summary>Writes a string directly to the output stream.</summary>
-    /// <param name="s">String to write to the output stream</param>
-    internal void WriteDirect(String s) {
-      Byte[] aByte = aByteFromString(s);
-      bufferedStream.Write(aByte, 0, aByte.Length);
-      iBytesWrittenToStream += aByte.Length;
-    }
-
-    //----------------------------------------------------------------------------------------------------x
-    /// <summary>Encodes a string according to the PDF "WinAnsiEncoding" (Windows code page 1252).</summary>
-    /// <param name="s">String to encode</param>
-    /// <returns>Byte array with exactly one byte per character</returns>
-    /// <remarks>
-    /// The standard fonts are written with "/Encoding /WinAnsiEncoding", so the text of the content streams
-    /// must be encoded with code page 1252 as well. This is done explicitly instead of using
-    /// <see cref="System.Text.Encoding.Default"/>: on the .NET Framework "Encoding.Default" is the ANSI code
-    /// page (usually CP-1252), but on .NET Core / .NET 5+ it is UTF-8. Under UTF-8 accented characters would
-    /// be written as several bytes (e.g. c-cedilla as 0xC3 0xA7, then rendered wrongly), and the byte count
-    /// would no longer match the "/Length" entries and the cross-reference (xref) offsets, corrupting the document.
-    /// The mapping produces one byte per character, so those lengths and offsets stay correct.
-    /// </remarks>
-    internal static Byte[] aByteFromString(String s) {
-      Byte[] aByte = new Byte[s.Length];
-      for (Int32 i = 0;  i < s.Length;  i++) {
-        Char c = s[i];
-        if (c < (Char)0x80 || (c >= (Char)0x00A0 && c <= (Char)0x00FF)) {
-          aByte[i] = (Byte)c;  // ASCII and Latin-1 range map 1:1 to WinAnsiEncoding
+        //----------------------------------------------------------------------------------------------------x
+        /// <summary>Copies the contents of the buffer to the PDF output stream.</summary>
+        internal void FlushBuffer()
+        {
+            Byte[] aByte = aByteFromString(sb.ToString());
+            bufferedStream.Write(aByte, 0, aByte.Length);
+            iBytesWrittenToStream += aByte.Length;
+            sb.Length = 0;
+            //sb.Remove(0, sb.Length);
         }
-        else {
-          aByte[i] = bWinAnsiSpecialChar(c);  // WinAnsi specific characters in the 0x80-0x9F range
+
+        //----------------------------------------------------------------------------------------------------x
+        /// <summary>Writes a string directly to the output stream.</summary>
+        /// <param name="s">String to write to the output stream</param>
+        internal void WriteDirect(String s)
+        {
+            Byte[] aByte = aByteFromString(s);
+            bufferedStream.Write(aByte, 0, aByte.Length);
+            iBytesWrittenToStream += aByte.Length;
         }
-      }
-      return aByte;
-    }
 
-    //----------------------------------------------------------------------------------------------------x
-    /// <summary>Maps a Unicode character to its Windows-1252 code in the 0x80-0x9F range.</summary>
-    /// <param name="c">Unicode character (outside the range that maps 1:1)</param>
-    /// <returns>Windows-1252 byte, or '?' if the character cannot be represented</returns>
-    private static Byte bWinAnsiSpecialChar(Char c) {
-      switch ((Int32)c) {
-        case 0x20AC: return 0x80;  // euro sign
-        case 0x201A: return 0x82;  // single low-9 quotation mark
-        case 0x0192: return 0x83;  // latin small letter f with hook
-        case 0x201E: return 0x84;  // double low-9 quotation mark
-        case 0x2026: return 0x85;  // horizontal ellipsis
-        case 0x2020: return 0x86;  // dagger
-        case 0x2021: return 0x87;  // double dagger
-        case 0x02C6: return 0x88;  // modifier letter circumflex accent
-        case 0x2030: return 0x89;  // per mille sign
-        case 0x0160: return 0x8A;  // latin capital letter s with caron
-        case 0x2039: return 0x8B;  // single left-pointing angle quotation mark
-        case 0x0152: return 0x8C;  // latin capital ligature oe
-        case 0x017D: return 0x8E;  // latin capital letter z with caron
-        case 0x2018: return 0x91;  // left single quotation mark
-        case 0x2019: return 0x92;  // right single quotation mark
-        case 0x201C: return 0x93;  // left double quotation mark
-        case 0x201D: return 0x94;  // right double quotation mark
-        case 0x2022: return 0x95;  // bullet
-        case 0x2013: return 0x96;  // en dash
-        case 0x2014: return 0x97;  // em dash
-        case 0x02DC: return 0x98;  // small tilde
-        case 0x2122: return 0x99;  // trade mark sign
-        case 0x0161: return 0x9A;  // latin small letter s with caron
-        case 0x203A: return 0x9B;  // single right-pointing angle quotation mark
-        case 0x0153: return 0x9C;  // latin small ligature oe
-        case 0x017E: return 0x9E;  // latin small letter z with caron
-        case 0x0178: return 0x9F;  // latin capital letter y with diaeresis
-        default: return (Byte)'?';   // not representable in WinAnsiEncoding
-      }
-    }
+        //----------------------------------------------------------------------------------------------------x
+        /// <summary>Encodes a string according to the PDF "WinAnsiEncoding" (Windows code page 1252).</summary>
+        /// <param name="s">String to encode</param>
+        /// <returns>Byte array with exactly one byte per character</returns>
+        /// <remarks>
+        /// The standard fonts are written with "/Encoding /WinAnsiEncoding", so the text of the content streams
+        /// must be encoded with code page 1252 as well. This is done explicitly instead of using
+        /// <see cref="System.Text.Encoding.Default"/>: on the .NET Framework "Encoding.Default" is the ANSI code
+        /// page (usually CP-1252), but on .NET Core / .NET 5+ it is UTF-8. Under UTF-8 accented characters would
+        /// be written as several bytes (e.g. c-cedilla as 0xC3 0xA7, then rendered wrongly), and the byte count
+        /// would no longer match the "/Length" entries and the cross-reference (xref) offsets, corrupting the document.
+        /// The mapping produces one byte per character, so those lengths and offsets stay correct.
+        /// </remarks>
+        internal static Byte[] aByteFromString(String s)
+        {
+            Byte[] aByte = new Byte[s.Length];
+            for (Int32 i = 0; i < s.Length; i++)
+            {
+                Char c = s[i];
+                if (c < (Char)0x80 || (c >= (Char)0x00A0 && c <= (Char)0x00FF))
+                {
+                    aByte[i] = (Byte)c;  // ASCII and Latin-1 range map 1:1 to WinAnsiEncoding
+                }
+                else
+                {
+                    aByte[i] = bWinAnsiSpecialChar(c);  // WinAnsi specific characters in the 0x80-0x9F range
+                }
+            }
+            return aByte;
+        }
 
-    //----------------------------------------------------------------------------------------------------x
-    /// <summary>Writes a line of text into the buffer.</summary>
-    /// <param name="s">String to append to the buffer</param>
-    private void WriteLine(String s) {
-      sb.Append(s);
-      sb.Append('\n');
-    }
-    #endregion
+        //----------------------------------------------------------------------------------------------------x
+        /// <summary>Maps a Unicode character to its Windows-1252 code in the 0x80-0x9F range.</summary>
+        /// <param name="c">Unicode character (outside the range that maps 1:1)</param>
+        /// <returns>Windows-1252 byte, or '?' if the character cannot be represented</returns>
+        private static Byte bWinAnsiSpecialChar(Char c)
+        {
+            switch ((Int32)c)
+            {
+                case 0x20AC: return 0x80;  // euro sign
+                case 0x201A: return 0x82;  // single low-9 quotation mark
+                case 0x0192: return 0x83;  // latin small letter f with hook
+                case 0x201E: return 0x84;  // double low-9 quotation mark
+                case 0x2026: return 0x85;  // horizontal ellipsis
+                case 0x2020: return 0x86;  // dagger
+                case 0x2021: return 0x87;  // double dagger
+                case 0x02C6: return 0x88;  // modifier letter circumflex accent
+                case 0x2030: return 0x89;  // per mille sign
+                case 0x0160: return 0x8A;  // latin capital letter s with caron
+                case 0x2039: return 0x8B;  // single left-pointing angle quotation mark
+                case 0x0152: return 0x8C;  // latin capital ligature oe
+                case 0x017D: return 0x8E;  // latin capital letter z with caron
+                case 0x2018: return 0x91;  // left single quotation mark
+                case 0x2019: return 0x92;  // right single quotation mark
+                case 0x201C: return 0x93;  // left double quotation mark
+                case 0x201D: return 0x94;  // right double quotation mark
+                case 0x2022: return 0x95;  // bullet
+                case 0x2013: return 0x96;  // en dash
+                case 0x2014: return 0x97;  // em dash
+                case 0x02DC: return 0x98;  // small tilde
+                case 0x2122: return 0x99;  // trade mark sign
+                case 0x0161: return 0x9A;  // latin small letter s with caron
+                case 0x203A: return 0x9B;  // single right-pointing angle quotation mark
+                case 0x0153: return 0x9C;  // latin small ligature oe
+                case 0x017E: return 0x9E;  // latin small letter z with caron
+                case 0x0178: return 0x9F;  // latin capital letter y with diaeresis
+                default: return (Byte)'?';   // not representable in WinAnsiEncoding
+            }
+        }
 
-    //------------------------------------------------------------------------------------------xx.01.2006
-    #region base
-    //----------------------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------------------x
+        /// <summary>Writes a line of text into the buffer.</summary>
+        /// <param name="s">String to append to the buffer</param>
+        private void WriteLine(String s)
+        {
+            sb.Append(s);
+            sb.Append('\n');
+        }
+        #endregion
 
-    //----------------------------------------------------------------------------------------------------x
-    /// <summary></summary>
-    /// <param name="report"></param>
-    /// <param name="stream"></param>
-    public override void Create(Report report, Stream stream) {
-      this.report = report;
-      this.stream = stream;
+        //------------------------------------------------------------------------------------------xx.01.2006
+        #region base
+        //----------------------------------------------------------------------------------------------------
 
-      //this.stream = stream;
-      iBytesWrittenToStream = 0;
+        //----------------------------------------------------------------------------------------------------x
+        /// <summary></summary>
+        /// <param name="report"></param>
+        /// <param name="stream"></param>
+        public override void Create(Report report, Stream stream)
+        {
+            this.report = report;
+            this.stream = stream;
 
-      #if WindowsCE
+            //this.stream = stream;
+            iBytesWrittenToStream = 0;
+
+#if WindowsCE
       bufferedStream = stream;
-      #else
-      bufferedStream = new BufferedStream(stream);
-      #endif
-      // Wichtig: Es muss die Standardeinstellung für die Codierung verwendet werden !!!
-      try {
-        PrepareObjIds();
+#else
+            bufferedStream = new BufferedStream(stream);
+#endif
+            // Wichtig: Es muss die Standardeinstellung für die Codierung verwendet werden !!!
+            try
+            {
+                PrepareObjIds();
 
-        sb.Length = 0;
+                sb.Length = 0;
 
-        // Header
-        sb.Append("%PDF-1.4\n");
-        FlushBuffer();
+                // Header
+                sb.Append("%PDF-1.4\n");
+                FlushBuffer();
 
-        // Body
-        foreach (PdfIndirectObject pdfIndirectObject in list_PdfIndirectObject) {
-          pdfIndirectObject.Write();
+                // Body
+                foreach (PdfIndirectObject pdfIndirectObject in list_PdfIndirectObject)
+                {
+                    pdfIndirectObject.Write();
+                }
+
+                FlushBuffer();
+                iXRefPos = iBytesWrittenToStream;
+                PdfFileElement_XRef pdfFileElement_XRef = new PdfFileElement_XRef(this);
+                pdfFileElement_XRef.Write();
+
+                PdfFileElement_Trailer pdfFileElement_Trailer = new PdfFileElement_Trailer(this);
+                pdfFileElement_Trailer.Write();
+                FlushBuffer();
+            }
+            finally
+            {
+                bufferedStream.Flush();
+                //bufferedStream.Close();
+            }
         }
+        #endregion
 
-        FlushBuffer();
-        iXRefPos = iBytesWrittenToStream;
-        PdfFileElement_XRef pdfFileElement_XRef = new PdfFileElement_XRef(this);
-        pdfFileElement_XRef.Write();
+        //------------------------------------------------------------------------------------------01.02.2006
+        #region PageMode
+        //----------------------------------------------------------------------------------------------------
 
-        PdfFileElement_Trailer pdfFileElement_Trailer = new PdfFileElement_Trailer(this);
-        pdfFileElement_Trailer.Write();
-        FlushBuffer();
-      }
-      finally {
-        bufferedStream.Flush();
-        //bufferedStream.Close();
-      }
+        /// <summary>PDF Page Layout</summary>
+        /// <remarks>The page-layout attribute will specify how the document should be displayed when it has been opened.</remarks>
+        public enum PageMode
+        {
+            /// <summary>Neither document outline nor thumbnail images are visible</summary>
+            UseNone,
+            /// <summary>Document outlines are visible</summary>
+            UseOutlines,
+            /// <summary>Thumbnail images are visible</summary>
+            UseThumbs,
+            /// <summary>Full-screen mode, with no menu bar, window controls, or any other window visible</summary>
+            FullScreen,
+            /// <summary>Optional content group panel is visible</summary>
+            UseOC,
+            /// <summary>Attachments panel is visible</summary>
+            UseAttachments
+        }
+        #endregion
+
+        //------------------------------------------------------------------------------------------29.01.2006
+        #region NonFullScreenPageMode
+        //----------------------------------------------------------------------------------------------------
+
+        /// <summary>PDF Full-Screen Page-Mode</summary>
+        /// <remarks>
+        /// The page-mode of the document will specify how to display the document on exiting full-screen mode.
+        /// This settings will be ignored, if the value of the <see cref="PageMode"/> entry isn't <see cref="FullScreen"/>.
+        /// </remarks>
+        public enum NonFullScreenPageMode
+        {
+            /// <summary>Neither document outline nor thumbnail images visible (default)</summary>
+            UseNone,
+            /// <summary>Document outline visible</summary>
+            UseOutlines,
+            /// <summary>Thumbnail images visible</summary>
+            UseThumbs,
+            /// <summary>Optional content group panel visible</summary>
+            UseOC
+        }
+        #endregion
     }
-    #endregion
-
-    //------------------------------------------------------------------------------------------01.02.2006
-    #region PageMode
-    //----------------------------------------------------------------------------------------------------
-
-    /// <summary>PDF Page Layout</summary>
-    /// <remarks>The page-layout attribute will specify how the document should be displayed when it has been opened.</remarks>
-    public enum PageMode {
-      /// <summary>Neither document outline nor thumbnail images are visible</summary>
-      UseNone,
-      /// <summary>Document outlines are visible</summary>
-      UseOutlines,
-      /// <summary>Thumbnail images are visible</summary>
-      UseThumbs,
-      /// <summary>Full-screen mode, with no menu bar, window controls, or any other window visible</summary>
-      FullScreen,
-      /// <summary>Optional content group panel is visible</summary>
-      UseOC,
-      /// <summary>Attachments panel is visible</summary>
-      UseAttachments
-    }
-    #endregion
-
-    //------------------------------------------------------------------------------------------29.01.2006
-    #region NonFullScreenPageMode
-    //----------------------------------------------------------------------------------------------------
-
-    /// <summary>PDF Full-Screen Page-Mode</summary>
-    /// <remarks>
-    /// The page-mode of the document will specify how to display the document on exiting full-screen mode.
-    /// This settings will be ignored, if the value of the <see cref="PageMode"/> entry isn't <see cref="FullScreen"/>.
-    /// </remarks>
-    public enum NonFullScreenPageMode {
-      /// <summary>Neither document outline nor thumbnail images visible (default)</summary>
-      UseNone,
-      /// <summary>Document outline visible</summary>
-      UseOutlines,
-      /// <summary>Thumbnail images visible</summary>
-      UseThumbs,
-      /// <summary>Optional content group panel visible</summary>
-      UseOC
-    }
-    #endregion
-  }
 }
