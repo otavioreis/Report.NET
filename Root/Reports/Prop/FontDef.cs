@@ -347,10 +347,12 @@ namespace Root.Reports {
       Arial,
       /// <summary>Font "Microsoft Sans Serif"</summary>
       /// <remarks>
-      /// Like Arial, this is not a standard PDF base font and is referenced by name only (not embedded),
-      /// so it renders faithfully in viewers that have the font installed (e.g. on Windows). Its metrics
-      /// were measured from the installed font; bold and italic are synthesized. The PDF declares
-      /// "MicrosoftSansSerif" (and "-Bold", "-Italic", "-BoldItalic") as the <c>BaseFont</c>.
+      /// All styles are embedded in the PDF file (TrueType font programs, resources "PDF\ttf\*.ttf"),
+      /// so they render faithfully in every viewer, including mobile devices that do not have the font
+      /// installed. The regular style is a CP1252 subset of the Microsoft Sans Serif font itself;
+      /// bold, italic and bold-italic use CP1252 subsets of the metrically compatible Arial styles,
+      /// because the Microsoft Sans Serif family has no real bold or italic font files (Windows
+      /// synthesizes them at render time). The AFM metrics match the embedded font programs.
       /// </remarks>
       MicrosoftSansSerif
     }

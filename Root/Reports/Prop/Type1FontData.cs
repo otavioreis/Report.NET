@@ -10,7 +10,7 @@ using System.IO;
 // Author: Otto Mayer (mot@root.ch)
 // Version: 1.03
 
-// Report.NET copyright © 2002-2006 root-software ag, Bürglen Switzerland - Otto Mayer, Stefan Spirig, all rights reserved
+// Report.NET copyright ï¿½ 2002-2006 root-software ag, Bï¿½rglen Switzerland - Otto Mayer, Stefan Spirig, all rights reserved
 // This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
 // as published by the Free Software Foundation, version 2.1 of the License.
 // This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -408,6 +408,20 @@ namespace Root.Reports {
     //internal readonly Int32 iKernDataCount;
 
     //internal readonly Int32 iCompositesCount;
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Embedded Font Program
+
+    /// <summary>TrueType font program that must be embedded in the PDF file, or null if the font is referenced by name only</summary>
+    /// <remarks>
+    /// The font program is loaded from the assembly resource "Root.Reports.PDF.ttf.&lt;FontName&gt;.ttf" if it exists.
+    /// </remarks>
+    internal readonly Byte[] aByte_FontProgram;
+
+    /// <summary><see langword="true"/> if the font program must be embedded in the PDF file.</summary>
+    internal Boolean bEmbedded {
+      get { return aByte_FontProgram != null; }
+    }
     #endregion
 
     //------------------------------------------------------------------------------------------16.02.2005
@@ -458,6 +472,21 @@ namespace Root.Reports {
         }
       }
       Stream stream = GetType().Assembly.GetManifestResourceStream("Root.Reports.PDF.afm." + sFontName + ".afm");
+
+      Stream stream_FontProgram = GetType().Assembly.GetManifestResourceStream("Root.Reports.PDF.ttf." + sFontName + ".ttf");
+      if (stream_FontProgram != null) {
+        using (stream_FontProgram) {
+          aByte_FontProgram = new Byte[(Int32)stream_FontProgram.Length];
+          Int32 iOffset = 0;
+          while (iOffset < aByte_FontProgram.Length) {
+            Int32 iBytesRead = stream_FontProgram.Read(aByte_FontProgram, iOffset, aByte_FontProgram.Length - iOffset);
+            if (iBytesRead <= 0) {
+              throw new ReportException("Cannot read the font program resource: " + sFontName);
+            }
+            iOffset += iBytesRead;
+          }
+        }
+      }
 
       StreamReader streamReader = new StreamReader(stream);
       try {

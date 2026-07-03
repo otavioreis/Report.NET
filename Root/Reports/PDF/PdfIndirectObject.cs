@@ -85,7 +85,7 @@ namespace Root.Reports {
       StartObj();
       Dictionary_Start();
       Dictionary_Key("Type");  Name("Catalog");
-      Dictionary_Key("Version");  Name("1.4");
+      Dictionary_Key("Version");  Name("2.0");
       Dictionary_Key("Pages");  IndirectReference(pdfFormatter.pdfIndirectObject_Pages);
       if (pdfFormatter.pageLayout != PageLayout.SinglePage) {
         Dictionary_Key("PageLayout");  Name(pdfFormatter.pageLayout.ToString("G"));

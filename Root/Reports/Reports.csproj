@@ -3,7 +3,7 @@
 		<TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;net48;net481;netcoreapp3.1;net6.0;net8.0;net10.0</TargetFrameworks>
 		<OutputType>Library</OutputType>
 		<RootNamespace>Root.Reports</RootNamespace>
-		<AssemblyName>Reports</AssemblyName>
+		<AssemblyName>ReportsCustomizadoPdfEmissorNacional</AssemblyName>
 		<MapFileExtensions>true</MapFileExtensions>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
@@ -42,6 +42,10 @@
 		<EmbeddedResource Include="PDF\afm\MicrosoftSansSerif-Bold.afm" />
 		<EmbeddedResource Include="PDF\afm\MicrosoftSansSerif-Italic.afm" />
 		<EmbeddedResource Include="PDF\afm\MicrosoftSansSerif-BoldItalic.afm" />
+		<EmbeddedResource Include="PDF\ttf\MicrosoftSansSerif.ttf" />
+		<EmbeddedResource Include="PDF\ttf\MicrosoftSansSerif-Bold.ttf" />
+		<EmbeddedResource Include="PDF\ttf\MicrosoftSansSerif-Italic.ttf" />
+		<EmbeddedResource Include="PDF\ttf\MicrosoftSansSerif-BoldItalic.ttf" />
 	</ItemGroup>
 
 	<ItemGroup>

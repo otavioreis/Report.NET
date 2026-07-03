@@ -1,22 +1,23 @@
 StartFontMetrics 4.1
-Comment Metrics measured from the installed Microsoft Sans Serif font via GDI, for Report.NET.
+Comment Metrics generated from the embedded TrueType font program (ariali.ttf subset), for Report.NET.
 FontName MicrosoftSansSerif-Italic
-FullName Microsoft Sans Serif Italic
+FullName MicrosoftSansSerif Italic
 FamilyName Microsoft Sans Serif
 Weight Normal
 ItalicAngle -12
 IsFixedPitch false
 CharacterSet ExtendedRoman
-FontBBox -251 -300 1200 950
-UnderlinePosition -213
-UnderlineThickness 143
+FontBBox -517 -325 1359 998
+UnderlinePosition -106
+UnderlineThickness 73
 EncodingScheme FontSpecific
 CapHeight 716
-XHeight 518
+XHeight 519
 Ascender 905
 Descender -212
-StartCharMetrics 191
-C 32 ; WX 266 ; N g32 ; B 0 0 266 700 ;
+StdVW 80
+StartCharMetrics 218
+C 32 ; WX 278 ; N g32 ; B 0 0 278 700 ;
 C 33 ; WX 278 ; N g33 ; B 0 0 278 700 ;
 C 34 ; WX 355 ; N g34 ; B 0 0 355 700 ;
 C 35 ; WX 556 ; N g35 ; B 0 0 556 700 ;
@@ -79,7 +80,7 @@ C 91 ; WX 278 ; N g91 ; B 0 0 278 700 ;
 C 92 ; WX 278 ; N g92 ; B 0 0 278 700 ;
 C 93 ; WX 278 ; N g93 ; B 0 0 278 700 ;
 C 94 ; WX 469 ; N g94 ; B 0 0 469 700 ;
-C 95 ; WX 552 ; N g95 ; B 0 0 552 700 ;
+C 95 ; WX 556 ; N g95 ; B 0 0 556 700 ;
 C 96 ; WX 333 ; N g96 ; B 0 0 333 700 ;
 C 97 ; WX 556 ; N g97 ; B 0 0 556 700 ;
 C 98 ; WX 556 ; N g98 ; B 0 0 556 700 ;
@@ -89,10 +90,10 @@ C 101 ; WX 556 ; N g101 ; B 0 0 556 700 ;
 C 102 ; WX 278 ; N g102 ; B 0 0 278 700 ;
 C 103 ; WX 556 ; N g103 ; B 0 0 556 700 ;
 C 104 ; WX 556 ; N g104 ; B 0 0 556 700 ;
-C 105 ; WX 228 ; N g105 ; B 0 0 228 700 ;
-C 106 ; WX 228 ; N g106 ; B 0 0 228 700 ;
+C 105 ; WX 222 ; N g105 ; B 0 0 222 700 ;
+C 106 ; WX 222 ; N g106 ; B 0 0 222 700 ;
 C 107 ; WX 500 ; N g107 ; B 0 0 500 700 ;
-C 108 ; WX 228 ; N g108 ; B 0 0 228 700 ;
+C 108 ; WX 222 ; N g108 ; B 0 0 222 700 ;
 C 109 ; WX 833 ; N g109 ; B 0 0 833 700 ;
 C 110 ; WX 556 ; N g110 ; B 0 0 556 700 ;
 C 111 ; WX 556 ; N g111 ; B 0 0 556 700 ;
@@ -111,8 +112,35 @@ C 123 ; WX 334 ; N g123 ; B 0 0 334 700 ;
 C 124 ; WX 260 ; N g124 ; B 0 0 260 700 ;
 C 125 ; WX 334 ; N g125 ; B 0 0 334 700 ;
 C 126 ; WX 584 ; N g126 ; B 0 0 584 700 ;
-C 160 ; WX 266 ; N g160 ; B 0 0 266 700 ;
-C 161 ; WX 278 ; N g161 ; B 0 0 278 700 ;
+C 128 ; WX 556 ; N g128 ; B 0 0 556 700 ;
+C 130 ; WX 222 ; N g130 ; B 0 0 222 700 ;
+C 131 ; WX 556 ; N g131 ; B 0 0 556 700 ;
+C 132 ; WX 333 ; N g132 ; B 0 0 333 700 ;
+C 133 ; WX 1000 ; N g133 ; B 0 0 1000 700 ;
+C 134 ; WX 556 ; N g134 ; B 0 0 556 700 ;
+C 135 ; WX 556 ; N g135 ; B 0 0 556 700 ;
+C 136 ; WX 333 ; N g136 ; B 0 0 333 700 ;
+C 137 ; WX 1000 ; N g137 ; B 0 0 1000 700 ;
+C 138 ; WX 667 ; N g138 ; B 0 0 667 700 ;
+C 139 ; WX 333 ; N g139 ; B 0 0 333 700 ;
+C 140 ; WX 1000 ; N g140 ; B 0 0 1000 700 ;
+C 142 ; WX 611 ; N g142 ; B 0 0 611 700 ;
+C 145 ; WX 222 ; N g145 ; B 0 0 222 700 ;
+C 146 ; WX 222 ; N g146 ; B 0 0 222 700 ;
+C 147 ; WX 333 ; N g147 ; B 0 0 333 700 ;
+C 148 ; WX 333 ; N g148 ; B 0 0 333 700 ;
+C 149 ; WX 350 ; N g149 ; B 0 0 350 700 ;
+C 150 ; WX 556 ; N g150 ; B 0 0 556 700 ;
+C 151 ; WX 1000 ; N g151 ; B 0 0 1000 700 ;
+C 152 ; WX 333 ; N g152 ; B 0 0 333 700 ;
+C 153 ; WX 1000 ; N g153 ; B 0 0 1000 700 ;
+C 154 ; WX 500 ; N g154 ; B 0 0 500 700 ;
+C 155 ; WX 333 ; N g155 ; B 0 0 333 700 ;
+C 156 ; WX 944 ; N g156 ; B 0 0 944 700 ;
+C 158 ; WX 500 ; N g158 ; B 0 0 500 700 ;
+C 159 ; WX 667 ; N g159 ; B 0 0 667 700 ;
+C 160 ; WX 278 ; N g160 ; B 0 0 278 700 ;
+C 161 ; WX 333 ; N g161 ; B 0 0 333 700 ;
 C 162 ; WX 556 ; N g162 ; B 0 0 556 700 ;
 C 163 ; WX 556 ; N g163 ; B 0 0 556 700 ;
 C 164 ; WX 556 ; N g164 ; B 0 0 556 700 ;
@@ -126,15 +154,15 @@ C 171 ; WX 556 ; N g171 ; B 0 0 556 700 ;
 C 172 ; WX 584 ; N g172 ; B 0 0 584 700 ;
 C 173 ; WX 333 ; N g173 ; B 0 0 333 700 ;
 C 174 ; WX 737 ; N g174 ; B 0 0 737 700 ;
-C 175 ; WX 500 ; N g175 ; B 0 0 500 700 ;
+C 175 ; WX 552 ; N g175 ; B 0 0 552 700 ;
 C 176 ; WX 400 ; N g176 ; B 0 0 400 700 ;
-C 177 ; WX 584 ; N g177 ; B 0 0 584 700 ;
+C 177 ; WX 549 ; N g177 ; B 0 0 549 700 ;
 C 178 ; WX 333 ; N g178 ; B 0 0 333 700 ;
 C 179 ; WX 333 ; N g179 ; B 0 0 333 700 ;
 C 180 ; WX 333 ; N g180 ; B 0 0 333 700 ;
-C 181 ; WX 556 ; N g181 ; B 0 0 556 700 ;
+C 181 ; WX 576 ; N g181 ; B 0 0 576 700 ;
 C 182 ; WX 537 ; N g182 ; B 0 0 537 700 ;
-C 183 ; WX 278 ; N g183 ; B 0 0 278 700 ;
+C 183 ; WX 333 ; N g183 ; B 0 0 333 700 ;
 C 184 ; WX 333 ; N g184 ; B 0 0 333 700 ;
 C 185 ; WX 333 ; N g185 ; B 0 0 333 700 ;
 C 186 ; WX 365 ; N g186 ; B 0 0 365 700 ;
@@ -142,7 +170,7 @@ C 187 ; WX 556 ; N g187 ; B 0 0 556 700 ;
 C 188 ; WX 834 ; N g188 ; B 0 0 834 700 ;
 C 189 ; WX 834 ; N g189 ; B 0 0 834 700 ;
 C 190 ; WX 834 ; N g190 ; B 0 0 834 700 ;
-C 191 ; WX 556 ; N g191 ; B 0 0 556 700 ;
+C 191 ; WX 611 ; N g191 ; B 0 0 611 700 ;
 C 192 ; WX 667 ; N g192 ; B 0 0 667 700 ;
 C 193 ; WX 667 ; N g193 ; B 0 0 667 700 ;
 C 194 ; WX 667 ; N g194 ; B 0 0 667 700 ;
@@ -187,10 +215,10 @@ C 232 ; WX 556 ; N g232 ; B 0 0 556 700 ;
 C 233 ; WX 556 ; N g233 ; B 0 0 556 700 ;
 C 234 ; WX 556 ; N g234 ; B 0 0 556 700 ;
 C 235 ; WX 556 ; N g235 ; B 0 0 556 700 ;
-C 236 ; WX 228 ; N g236 ; B 0 0 228 700 ;
-C 237 ; WX 228 ; N g237 ; B 0 0 228 700 ;
-C 238 ; WX 228 ; N g238 ; B 0 0 228 700 ;
-C 239 ; WX 228 ; N g239 ; B 0 0 228 700 ;
+C 236 ; WX 278 ; N g236 ; B 0 0 278 700 ;
+C 237 ; WX 278 ; N g237 ; B 0 0 278 700 ;
+C 238 ; WX 278 ; N g238 ; B 0 0 278 700 ;
+C 239 ; WX 278 ; N g239 ; B 0 0 278 700 ;
 C 240 ; WX 556 ; N g240 ; B 0 0 556 700 ;
 C 241 ; WX 556 ; N g241 ; B 0 0 556 700 ;
 C 242 ; WX 556 ; N g242 ; B 0 0 556 700 ;
@@ -198,8 +226,8 @@ C 243 ; WX 556 ; N g243 ; B 0 0 556 700 ;
 C 244 ; WX 556 ; N g244 ; B 0 0 556 700 ;
 C 245 ; WX 556 ; N g245 ; B 0 0 556 700 ;
 C 246 ; WX 556 ; N g246 ; B 0 0 556 700 ;
-C 247 ; WX 584 ; N g247 ; B 0 0 584 700 ;
-C 248 ; WX 556 ; N g248 ; B 0 0 556 700 ;
+C 247 ; WX 549 ; N g247 ; B 0 0 549 700 ;
+C 248 ; WX 611 ; N g248 ; B 0 0 611 700 ;
 C 249 ; WX 556 ; N g249 ; B 0 0 556 700 ;
 C 250 ; WX 556 ; N g250 ; B 0 0 556 700 ;
 C 251 ; WX 556 ; N g251 ; B 0 0 556 700 ;

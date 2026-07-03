@@ -108,7 +108,7 @@ namespace Root.Reports
         public String sKeywords;
 
         /// <summary>Program that converted the document to PDF</summary>
-        internal String sProducer = "Report.NET by root-software ag";
+        internal String sProducer = "Nota Gateway PDF Engine";
 
         /// <summary>Modification date and time of  the document</summary>
         internal DateTime dt_ModDate = DateTime.Now;
@@ -726,7 +726,7 @@ namespace Root.Reports
                 sb.Length = 0;
 
                 // Header
-                sb.Append("%PDF-1.4\n");
+                sb.Append("%PDF-2.0\n");
                 FlushBuffer();
 
                 // Body
